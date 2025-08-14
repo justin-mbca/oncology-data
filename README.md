@@ -1,3 +1,36 @@
+## API Endpoints
+
+- `GET /` — Health check, returns API status
+- `POST /run/daily` — Run the daily pipeline (requires `fhir_url` in body)
+- `POST /hitl/{task_id}` — Human-in-the-loop approval for a task
+
+See [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) for full interactive API documentation.
+
+## Configuration
+
+Key environment variables and settings (see `common/settings.py`):
+
+- `FHIR_BASE_URL`: Default FHIR server URL (can be overridden per request)
+- `S3_BUCKET`, `S3_ENDPOINT`: S3 storage settings (if used)
+- `DBT_PROJECT_DIR`: Path to dbt project
+- `DELTA_ROOT`: Local or S3 path for data
+- `HITL_DB`: SQLite file for HITL queue
+
+You can set these in a `.env` file or as environment variables.
+
+## Troubleshooting
+
+- **VCF parsing returns null:**
+	- Ensure your VCF file is tab-delimited and in the correct location (`data/genomics_drop_test.vcf`).
+	- Check server logs for errors.
+- **FHIR errors:**
+	- Make sure you use a valid FHIR URL (e.g., `https://hapi.fhir.org/baseR4`).
+- **Dependency issues:**
+	- Run `pip install -r requirements.txt` to install all dependencies.
+
+## Contact
+
+For questions or collaboration, contact [justin-mbca on GitHub](https://github.com/justin-mbca).
 ## Usage Examples
 
 ### Run the API server
