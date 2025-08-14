@@ -19,10 +19,11 @@ def daily_run(fhir_url: str, cohort_tag: str = None) -> ToolResult:
     norm = normalize_loinc(loincs)
     qc = run_silver_checks("silver.observation")
 
+
     # genomics discovery + process one sample
     g = discover_genomics("s3://genomics/drop/")
-    # for demo, pretend we have one vcf
-    anno = parse_and_annotate_vcf("s3://genomics/drop/sample1.vcf.gz", "SAMPLE_001")
+    # use the downloaded test VCF file
+    anno = parse_and_annotate_vcf("s3://genomics/drop/test.vcf", "TEST_SAMPLE")
 
     # require HITL before any external export
 
