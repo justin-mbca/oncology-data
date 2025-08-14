@@ -1,0 +1,13 @@
+version: 2
+models:
+  - name: variants
+    columns:
+      - name: patient_key
+        tests: [not_null]
+      - name: sample_id
+        tests: [not_null, unique]
+      - name: build
+      - name: chrom
+      - name: pos
+      - name: gene
+      - name: clin_sig
