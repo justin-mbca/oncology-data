@@ -2,37 +2,37 @@
 
 ```mermaid
 flowchart TD
-	subgraph Ingestion
-		FHIR[FHIR Server]
-		VCF[VCF File]
-	end
-	subgraph API
-		FastAPI[FastAPI App]
-	end
-	subgraph Processing
-		Norm[Normalization (dbt, Great Expectations)]
-		Genomics[Genomics Parsing & Annotation]
-		QC[Data Quality Checks]
-		HITL[HITL Approval]
-	end
-	subgraph Storage
-		S3[S3/Local Storage]
-		DBT[dbt Gold Tables]
-		SQLite[HITL DB]
-	end
+    subgraph Ingestion
+        FHIR[FHIR Server]
+        VCF[VCF File]
+    end
+    subgraph API
+        FastAPI[FastAPI App]
+    end
+    subgraph Processing
+        Norm[Normalization - dbt, Great Expectations]
+        Genomics[Genomics Parsing & Annotation]
+        QC[Data Quality Checks]
+        HITL[HITL Approval]
+    end
+    subgraph Storage
+        S3[S3 or Local Storage]
+        DBT[dbt Gold Tables]
+        SQLite[HITL DB]
+    end
 
-	FHIR -->|/run/daily| FastAPI
-	VCF -->|VCF Parse| FastAPI
-	FastAPI --> Norm
-	FastAPI --> Genomics
-	FastAPI --> QC
-	Norm --> DBT
-	Genomics --> DBT
-	QC --> DBT
-	FastAPI --> HITL
-	HITL --> SQLite
-	FastAPI --> S3
-	S3 --> Genomics
+    FHIR -->|/run/daily| FastAPI
+    VCF -->|VCF Parse| FastAPI
+    FastAPI --> Norm
+    FastAPI --> Genomics
+    FastAPI --> QC
+    Norm --> DBT
+    Genomics --> DBT
+    QC --> DBT
+    FastAPI --> HITL
+    HITL --> SQLite
+    FastAPI --> S3
+    S3 --> Genomics
 ```
 ## Sample API Requests & Responses
 
