@@ -1,3 +1,33 @@
+## Usage Examples
+
+### Run the API server
+```bash
+python -m uvicorn api.app:app --reload
+```
+
+### Try the API
+- Visit [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) for interactive docs
+- Example: Run the daily pipeline with a public FHIR server
+	```bash
+	curl -X POST "http://127.0.0.1:8000/run/daily" \
+		-H "accept: application/json" \
+		-H "Content-Type: application/json" \
+		-d '{"fhir_url": "https://hapi.fhir.org/baseR4"}'
+	```
+
+### Genomics Support Example
+The pipeline includes genomics processing steps such as VCF parsing and variant annotation. For demonstration, the `/run/daily` endpoint simulates:
+- Discovering VCF files (e.g., from S3 or local storage)
+- Parsing a VCF file and extracting variants
+- Annotating variants (e.g., with gene, consequence, clinical significance)
+
+You can see the genomics results in the `genomics` field of the `/run/daily` response. Example snippet:
+```json
+"genomics": {
+	"n_annotated": 10
+}
+```
+This means 10 variants were parsed and annotated in the demo pipeline. In a real deployment, you would connect to actual VCF files and annotation services.
 
 # Oncology Data Pipeline
 
