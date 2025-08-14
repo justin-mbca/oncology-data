@@ -1,3 +1,86 @@
+## Sample API Requests & Responses
+
+### /run/daily (POST)
+**Request:**
+```json
+{
+	"fhir_url": "https://hapi.fhir.org/baseR4"
+}
+```
+**Response (snippet):**
+```json
+{
+	"ok": true,
+	"data": {
+		"observations": {"pointers": [...]},
+		"genomics": {"n_annotated": 10},
+		"qc": {"suite": "onc_silver", "stats": {"row_count": 12345}},
+		...
+	}
+}
+```
+
+### /hitl/{task_id} (POST)
+**Request:**
+```json
+{
+	"approve": true
+}
+```
+**Response:**
+```json
+{
+	"task_id": "export-test",
+	"status": "APPROVED"
+}
+```
+
+## Role-Based Access Example
+
+Endpoints require specific roles:
+- `/run/daily`: requires `etl_runner`
+- `/hitl/{task_id}`: requires `analyst`
+
+Roles are stubbed in the code but can be integrated with OIDC or other auth providers.
+
+## Human-in-the-Loop (HITL) Example
+
+When the pipeline reaches a sensitive operation (e.g., data export), a HITL task is created:
+```json
+{
+	"task_id": "export-test",
+	"status": "PENDING"
+}
+```
+An analyst can then approve or reject the task via `/hitl/{task_id}`.
+
+## Data Quality/Validation Example
+
+The pipeline runs Great Expectations checks. Example output:
+```json
+{
+	"qc": {
+		"suite": "onc_silver",
+		"table": "silver.observation",
+		"stats": {"row_count": 12345}
+	}
+}
+```
+
+## dbt/SQL Transformation Example
+
+The project includes dbt models for transforming and aggregating data. Example (from `models/gold/variants.sql`):
+```sql
+select * from base
+```
+See the `transforms/dbt_project/models/` directory for more.
+
+## Extending the Pipeline
+
+- Add new endpoints in `api/app.py`
+- Add new tools in the `tools/` directory
+- Add new dbt models in `transforms/dbt_project/models/`
+- Update settings in `common/settings.py`
 ## API Endpoints
 
 - `GET /` — Health check, returns API status
